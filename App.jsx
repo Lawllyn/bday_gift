@@ -12,12 +12,18 @@ import './style.css';
 
 const UCAPAN_TEXT = "Hi, happy birthday!\n\nI hope you have a wonderful day filled with joy and laughter. You deserve all the best on your special day.\n\nMay this year bring you plenty of reasons to smile and endless opportunities to make beautiful memories. Remember to take some time for yourself and enjoy the little things that make life special.";
 
+
 export default function App() {
   const [step, setStep] = useState('runaway'); 
   const [activePopup, setActivePopup] = useState(null); 
   const [isBlownOut, setIsBlownOut] = useState(false);
 
   const hasPlopPlayedRef = useRef(false);
+
+  // 🔴 TAMBAHAN 1: Paksa browser mengunci tema agar tidak terpengaruh dark mode device
+  useEffect(() => {
+    document.documentElement.style.colorScheme = 'light';
+  }, []);
 
   useEffect(() => {
     const munAvatar = document.querySelector('.avatar-mun');

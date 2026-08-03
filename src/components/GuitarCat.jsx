@@ -6,7 +6,6 @@ export default function GuitarCat({ step, isFinished }) {
   const [idleMessage, setIdleMessage] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   
-  // State untuk kontrol teks hint (Hilang otomatis/saat dipencet)
   const [showHint, setShowHint] = useState(true);
 
   const posXRef = useRef(45); // Posisi horizontal (%)
@@ -23,6 +22,7 @@ export default function GuitarCat({ step, isFinished }) {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+  
 
   // 2. Timer Hilangkan Hint Otomatis setelah 4 Detik
   useEffect(() => {
@@ -75,7 +75,6 @@ export default function GuitarCat({ step, isFinished }) {
     let animationFrameId;
 
     const updatePosition = () => {
-      // 🚀 NAIKKAN KECEPATAN: Bikin lebih cepat saat loading (1.2) dibanding biasa (0.8)
       const stepSpeed = step === 'loading' ? 0.8 : 0.8; 
 
       if (keysPressed.current['arrowleft'] || keysPressed.current['a']) {
@@ -95,14 +94,13 @@ export default function GuitarCat({ step, isFinished }) {
 
     animationFrameId = requestAnimationFrame(updatePosition);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isMobile, step]); // Tambahkan step ke dependency array
+  }, [isMobile, step]);
 
   // 6. Key Listeners dengan penanganan Space & Arrow Keys
   useEffect(() => {
     if (isMobile) return;
 
     const handleKeyDown = (e) => {
-      // Langsung hilangkan hint saat tombol gerakan ditekan
       if (['a', 'd', 'arrowleft', 'arrowright', 'w', 'arrowup', ' '].includes(e.key.toLowerCase())) {
         setShowHint(false);
       }
@@ -110,7 +108,6 @@ export default function GuitarCat({ step, isFinished }) {
       const key = e.key.toLowerCase();
       keysPressed.current[key] = true;
 
-      // Lompat
       if ((e.code === 'Space' || key === 'arrowup' || key === 'w') && !isJumping) {
         e.preventDefault();
         setIsJumping(true);
@@ -138,13 +135,10 @@ export default function GuitarCat({ step, isFinished }) {
   };
 
   const currentBubbleText = getBubbleText();
-
-  // URL gambar yang aman untuk public directory Vite & GitHub Pages
   const catImgUrl = `${import.meta.env.BASE_URL}foto/cat.png`;
 
   return (
     <>
-      {/* Dynamic CSS Animation untuk Lompat & Bubble */}
       <style>{`
         @keyframes catJumpAnim {
           0% { transform: translateY(0); }
@@ -167,7 +161,9 @@ export default function GuitarCat({ step, isFinished }) {
         style={{
           position: 'fixed',
           bottom: '15px',
-          left: '45%',
+          /* 🔴 PENYESUAIAN MOBILE: Paksa 50% di mobile, atau 45% default desktop */
+          left: isMobile ? '50%' : `${posXRef.current}%`,
+          transform: isMobile ? 'translateX(-50%)' : 'none',
           textAlign: 'center',
           zIndex: 999,
           userSelect: 'none',
@@ -229,7 +225,7 @@ export default function GuitarCat({ step, isFinished }) {
             }} />
           </div>
         ) : (
-          /* Teks Hint Bawah (Hanya muncul jika showHint true) */
+          /* Teks Hint Bawah */
           showHint && (
             <div style={{
               fontSize: '9px',
