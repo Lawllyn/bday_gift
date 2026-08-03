@@ -1,0 +1,712 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* Kunci rendering teks agar tidak ada font-blur di browser apa pun */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background-color: #1a1525;
+    color: #fce4ec;
+    font-family: 'Share Tech Mono', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 40px 20px 80px 20px;
+    position: relative;
+    text-rendering: optimizeLegibility;
+
+    /* BACKGROUND 1: EFEK GARIS GRID RETRO CYBER */
+    background-image: 
+        linear-gradient(rgba(255, 128, 171, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 128, 171, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center;
+}
+
+/* Optimasi Animasi GPU */
+.star-falling, 
+.moon-bg, 
+.hinmun-avatar, 
+.loading-avatar,
+.parchment-container {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* ================= BACKGROUND SIHIR BINTANG PIXEL (FIXED FULLSCREEN) ================= */
+.stars {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    background-image: 
+        radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #ff80ab, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 90px 10px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 150px 120px, #1de9b6, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 230px 40px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 310px 190px, #ffeb3b, rgba(0,0,0,0));
+    background-size: 200px 200px;
+    animation: twinkling 4s ease-in-out infinite alternate;
+    opacity: 0.6;
+}
+
+@keyframes twinkling {
+    0% { opacity: 0.3; transform: scale(0.98); }
+    100% { opacity: 0.8; transform: scale(1.02); }
+}
+
+/* ================= DEKORASI BORDER RETRO CYBER ================= */
+body::before {
+    content: "";
+    position: fixed;
+    top: 20px; bottom: 20px; left: 20px; right: 20px;
+    border: 4px double rgba(255, 128, 171, 0.2);
+    pointer-events: none;
+    z-index: 5;
+    box-shadow: inset 0 0 20px rgba(171, 71, 188, 0.1);
+}
+
+.pixel-text {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.pixel-text-sub {
+    font-family: 'Press Start 2P', monospace;
+    text-align: center;
+}
+
+.color-magenta {
+    color: #ff80ab;
+}
+
+/* ================= CONTAINER LOADING ================= */
+.loading-wrapper,
+#loading-area,
+.loading-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    position: relative;
+    z-index: 20 !important;
+    margin-top: -30px;
+}
+
+/* ================= TOMBOL KABUR ================= */
+#runaway-btn {
+    padding: 12px 22px;
+    font-family: 'DynaPuff', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    background: rgba(37, 31, 51, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 128, 171, 0.6);
+    border-radius: 50px;
+    cursor: pointer;
+    position: absolute;
+    z-index: 30;
+    text-align: center;
+    max-width: 85vw;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.3;
+    user-select: none;
+    box-shadow: 
+        0 0 12px rgba(255, 128, 171, 0.4),
+        inset 0 0 8px rgba(255, 128, 171, 0.2);
+    text-shadow: 0 0 8px rgba(255, 128, 171, 0.8);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+}
+
+#runaway-btn:hover, #runaway-btn:active {
+    background: rgba(255, 128, 171, 0.25);
+    border-color: #ff80ab;
+    box-shadow: 
+        0 0 20px rgba(255, 128, 171, 0.8),
+        inset 0 0 12px rgba(255, 128, 171, 0.5);
+    transform: scale(1.05);
+}
+
+#runaway-btn:active { transform: scale(0.95); }
+
+#loading-counter,
+.loading-percentage {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 3.2rem; 
+    color: #1de9b6;
+    font-weight: bold;
+    margin-bottom: 2px;
+    position: relative;
+    z-index: 21;
+    text-shadow: 
+        0 0 10px rgba(0, 0, 0, 0.9),
+        0 0 20px rgba(29, 233, 182, 0.8),
+        2px 2px 0px #000;
+}
+
+#yapping-box,
+.loading-subtext {
+    font-size: 1rem;
+    color: #ffffff; 
+    max-width: 400px;
+    min-height: 40px;
+    line-height: 1.4;
+    text-align: center;
+    padding: 0 15px;
+    position: relative;
+    z-index: 21;
+    text-shadow: 
+        0 0 8px #000,
+        0 0 12px rgba(255, 255, 255, 0.9),
+        1px 1px 0px #000;
+}
+
+/* ================= HALAMAN AMPLOP UTAMA ================= */
+.page-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    animation: fadeIn 0.8s ease-in-out;
+    position: relative;
+    z-index: 25;
+}
+
+.main-envelope-img {
+    width: 200px;
+    height: auto;
+    filter: drop-shadow(0px 6px 12px rgba(255,255,255,0.1));
+}
+
+.btn-group {
+    display: flex;
+    gap: 20px;
+}
+
+.pixel-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    padding: 12px 20px;
+    border: 3px solid #fce4ec;
+    box-shadow: 3px 3px 0px #fce4ec;
+    cursor: pointer;
+    color: #1a1525;
+    outline: none;
+}
+.pixel-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px #fce4ec;
+}
+.btn-gray { background-color: #b0bec5; }
+.btn-pink { background-color: #ff80ab; }
+
+/* ================= ANIMASI DVD BOUNCING LOADING ================= */
+@keyframes dvdBounce {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(35px, -15px) rotate(4deg); }
+    50% { transform: translate(-30px, 10px) rotate(-4deg); }
+    75% { transform: translate(25px, -8px) rotate(2deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.loading-avatar {
+    width: 120px;
+    height: auto;
+    border-radius: 12px;
+    border: none;
+    margin-bottom: 6px;
+    animation: dvdBounce 4s infinite ease-in-out;
+    filter: drop-shadow(0 0 12px rgba(255, 128, 171, 0.5));
+    position: relative;
+    z-index: 21;
+}
+
+/* ================= PARTIKEL BULAN PIXEL ================= */
+.pixel-moon {
+    position: fixed;
+    top: 50px;
+    right: 70px;
+    width: 6px;
+    height: 6px;
+    background: #fffde7;
+    pointer-events: none;
+    z-index: 2;
+  
+    box-shadow: 
+        0px -18px 0 #fffde7,  6px -18px 0 #fffde7,
+        -6px -12px 0 #fff59d, 12px -12px 0 #fffde7,
+        -12px -6px 0 #fff59d, 18px -6px 0 #ffee58,
+        -12px 0px 0 #fff59d,  18px 0px 0 #ffee58,
+        -12px 6px 0 #fff59d,  18px 6px 0 #ffee58,
+        -6px 12px 0 #fff59d,  12px 12px 0 #fffde7,
+        0px 18px 0 #fffde7,   6px 18px 0 #fffde7,
+
+        -24px -24px 0 1px #ffee58,
+        30px -10px 0 1px #fff,
+        -30px 15px 0 1px #ffd700,
+        24px 24px 0 1px #fff;
+
+    animation: particlePulse 2.5s infinite ease-in-out alternate;
+}
+
+@keyframes particlePulse {
+    0% {
+        opacity: 0.75;
+        transform: scale(1) translateY(0);
+        filter: drop-shadow(0 0 4px rgba(255, 245, 157, 0.6));
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.08) translateY(-3px);
+        filter: drop-shadow(0 0 10px rgba(255, 238, 88, 0.9));
+    }
+}
+
+/* ================= AREA MAIN CONTENT & GRID LAYOUT ================= */
+.main-content-wrapper {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 45px;
+    align-items: start;
+    width: 100%;
+    max-width: 1100px;
+    animation: fadeIn 1s ease-in-out;
+    margin: 20px auto 0 auto; 
+    position: relative;
+    z-index: 25;
+}
+
+.left-side-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.music-player-card {
+    background: #251f33;
+    border: 2px solid #ff80ab;
+    padding: 15px 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.song-title {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+}
+
+.cake-wrapper {
+    text-align: center;
+    width: 100%;
+}
+
+.right-side-panel {
+    width: 100%;
+}
+
+/* ================= STACK WRAPPER & LAYER BELAKANG ================= */
+.paper-stack-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 420px !important;
+    margin-top: 10px;
+}
+
+.paper-layer {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+}
+
+/* KERTAS BELAKANG 1 (KIRI) */
+.paper-back-1 {
+    background: linear-gradient(135deg, #eee1cd 0%, #dfc8a8 100%) !important;
+    border: 2px solid #8c6f48 !important;
+    z-index: 1 !important;
+    transform: rotate(-10deg) translate(-22px, -14px) !important;
+    clip-path: polygon(
+        0% 1%, 15% 0%, 30% 2%, 45% 0.5%, 60% 1.8%, 75% 0%, 90% 1.5%, 100% 0%,
+        99% 30%, 100% 60%, 98.5% 90%, 100% 100%,
+        85% 99%, 70% 100%, 55% 98.5%, 40% 99.5%, 25% 98%, 10% 99%, 0% 98.5%,
+        1% 65%, 0% 35%
+    ) !important;
+    filter: drop-shadow(-4px 4px 6px rgba(0,0,0,0.3));
+}
+
+/* KERTAS BELAKANG 2 (KANAN) */
+.paper-back-2 {
+    background: linear-gradient(135deg, #e0cfb6 0%, #ceb08a 100%) !important;
+    border: 2px solid #705330 !important;
+    z-index: 0 !important;
+    transform: rotate(8deg) translate(22px, 16px) !important;
+    clip-path: polygon(
+        0% 2%, 10% 0.5%, 25% 1.5%, 40% 0%, 60% 2%, 75% 0.8%, 85% 1.8%, 100% 0.5%,
+        98.5% 25%, 100% 55%, 99% 80%, 100% 99%,
+        90% 98.5%, 75% 100%, 60% 98.2%, 45% 99.8%, 30% 98.5%, 15% 99.5%, 0% 99%,
+        1.5% 70%, 0% 40%
+    ) !important;
+    filter: drop-shadow(6px 6px 8px rgba(0,0,0,0.35));
+}
+
+/* ================= KERTAS FUTURISTIK FROSTED GLASS ================= */
+
+/* KERTAS 2 (BELAKANG KIRI) */
+.paper-back-1 {
+    /* Glassmorphism semi transparan */
+    background: rgba(227, 210, 186, 0.25) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    
+    border: 1.5px solid rgba(255, 128, 171, 0.4) !important;
+    z-index: 1 !important;
+    transform: rotate(-10deg) translate(-22px, -14px) !important;
+    clip-path: polygon(
+        0% 1%, 15% 0%, 30% 2%, 45% 0.5%, 60% 1.8%, 75% 0%, 90% 1.5%, 100% 0%,
+        99% 30%, 100% 60%, 98.5% 90%, 100% 100%,
+        85% 99%, 70% 100%, 55% 98.5%, 40% 99.5%, 25% 98%, 10% 99%, 0% 98.5%,
+        1% 65%, 0% 35%
+    ) !important;
+    box-shadow: 0 0 15px rgba(255, 128, 171, 0.2) !important;
+}
+
+/* KERTAS 3 (BELAKANG KANAN) */
+.paper-back-2 {
+    background: rgba(212, 191, 156, 0.2) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+
+    border: 1.5px solid rgba(29, 233, 182, 0.3) !important;
+    z-index: 0 !important;
+    transform: rotate(8deg) translate(22px, 16px) !important;
+    clip-path: polygon(
+        0% 2%, 10% 0.5%, 25% 1.5%, 40% 0%, 60% 2%, 75% 0.8%, 85% 1.8%, 100% 0.5%,
+        98.5% 25%, 100% 55%, 99% 80%, 100% 99%,
+        90% 98.5%, 75% 100%, 60% 98.2%, 45% 99.8%, 30% 98.5%, 15% 99.5%, 0% 99%,
+        1.5% 70%, 0% 40%
+    ) !important;
+    box-shadow: 0 0 15px rgba(29, 233, 182, 0.15) !important;
+}
+
+/* KERTAS UTAMA (DEPAN - FUTURISTIC FROSTED GLASS) */
+.parchment-container {
+    width: 100% !important;
+    min-height: 420px !important;
+    padding: 40px 35px 35px 35px !important;
+    position: relative !important;
+    text-align: left !important;
+    z-index: 2 !important;
+
+    /* Background Kaca Transparan Cyber + Gradient Vintage Tipis */
+    background: linear-gradient(
+        135deg, 
+        rgba(247, 235, 217, 0.65) 0%, 
+        rgba(235, 212, 181, 0.45) 100%
+    ) !important;
+    
+    /* EFEK BLUR FUTURISTIK */
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    
+    /* Border Neon Pink Tipis */
+    border: 2px solid rgba(255, 128, 171, 0.5) !important;
+
+    /* Polygon Gerigi Pixel */
+    clip-path: polygon(
+        0% 1.5%, 12% 0.5%, 25% 1.8%, 38% 0.3%, 50% 1.5%, 63% 0.6%, 75% 1.4%, 88% 0.2%, 100% 1.2%,
+        99.2% 25%, 100% 50%, 98.8% 75%, 100% 98.5%,
+        88% 99.5%, 75% 98.2%, 63% 99.7%, 50% 98.6%, 38% 99.8%, 25% 98.4%, 12% 99.5%, 0% 98.8%,
+        0.8% 75%, 0% 50%, 1.2% 25%
+    ) !important;
+
+    /* Glow Effect Halus */
+    box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.37),
+        inset 0 0 15px rgba(255, 255, 255, 0.3) !important;
+    filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.6)) !important;
+    
+    transform: rotate(-1deg) !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+
+/* Garis Hologram/Scanline Tipis di Kertas Utama */
+.parchment-container::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1 !important;
+    background: linear-gradient(
+        180deg, 
+        transparent 50%, 
+        rgba(255, 128, 171, 0.05) 51%, 
+        transparent 52%
+    ) !important;
+    background-size: 100% 6px !important;
+    pointer-events: none !important;
+}
+
+/* Warna Teks Dibuat Agak Gelap Pekat Agar Tetap Mudah Dibaca */
+#text-box {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #2a2018 !important; 
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.8) !important;
+    position: relative;
+    z-index: 3;
+    margin-bottom: 20px;
+}
+
+/* ================= DAFTAR SUB-AMPLOP ================= */
+.needs-more-section {
+    grid-column: 1 / -1;
+    margin-top: 40px;
+    text-align: center;
+    width: 100%;
+}
+
+.sub-envelopes {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+}
+
+.envelope-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.envelope-item:hover { transform: scale(1.1); }
+
+.envelope-item img {
+    width: 85px;
+    height: auto;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 2px 5px rgba(255,255,255,0.1));
+    image-rendering: pixelated;
+}
+
+.envelope-item span {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: #ff80ab;
+}
+
+/* ================= SYSTEM POPUP MODAL ================= */
+.popup-overlay {
+    display: flex;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); 
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+    padding: 15px;
+}
+
+.popup-content {
+    position: relative;
+    background-color: #251f33; 
+    border: 4px solid #fce4ec;
+    border-radius: 12px;
+    padding: 45px 20px 25px 20px;
+    max-width: 460px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: left;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.content-image-only {
+    background-color: #251f33 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+}
+
+.popup-img-src {
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: 6px;
+    image-rendering: pixelated;
+}
+
+.popup-letter-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #fce4ec;
+    white-space: normal;
+    word-wrap: break-word;
+    width: 100%;
+    text-align: left;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    background-color: #ff4081; 
+    width: 36px;
+    height: 36px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 105;
+}
+
+/* ================= FOOTER ================= */
+.pixel-footer {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: #ff80ab;
+    text-align: center;
+    letter-spacing: 1px;
+    opacity: 0.8;
+    width: 100%;
+    pointer-events: none; 
+    z-index: 0; 
+}
+
+/* ================= KUE ULANG TAHUN ================= */
+.cake {
+    position: relative;
+    width: 150px;
+    height: 120px;
+    margin: 25px auto 0 auto;
+    cursor: pointer;
+}
+
+.plate {
+    width: 180px;
+    height: 12px;
+    background: #4a3b4e; 
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0;
+    left: -15px;
+}
+
+.layer {
+    display: block;
+    position: absolute;
+    width: 150px;
+    height: 35px;
+    border-radius: 10px 10px 0 0;
+}
+
+.layer-bottom { background: #e29696; bottom: 10px; }
+.layer-middle { background: #e34c7e; width: 120px; height: 30px; bottom: 45px; left: 15px; }
+.layer-top { background: #e875da; width: 90px; height: 25px; bottom: 75px; left: 30px; }
+
+.candle {
+    background: #ffffff;
+    width: 8px;
+    height: 25px;
+    position: absolute;
+    bottom: 100px;
+    left: 71px;
+}
+
+.flame {
+    background: #ffca28;
+    width: 12px;
+    height: 18px;
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    position: absolute;
+    bottom: 125px;
+    left: 69px;
+    box-shadow: 0 0 10px rgba(255, 202, 40, 0.8);
+    animation: flicker 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes flicker {
+    0% { transform: scale(1) rotate(-2deg); }
+    100% { transform: scale(1.1) rotate(2deg); box-shadow: 0 0 15px rgba(255, 202, 40, 1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= RESPONSIVE MOBILE (HP) ================= */
+@media screen and (max-width: 850px) {
+    .main-content-wrapper {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body { 
+        padding: 20px 10px 60px 10px; 
+        background-image: none;
+    }
+    body::before { display: none; }
+    .pixel-text { font-size: 13px !important; }
+    
+    #runaway-btn { 
+        padding: 10px 18px !important; 
+        font-size: 13px !important; 
+        max-width: 80vw !important;
+        line-height: 1.3 !important;
+        border-width: 2px !important;
+        box-shadow: 0 4px 12px rgba(248, 187, 208, 0.4) !important;
+    }
+
+    #loading-counter, .loading-percentage { font-size: 2.3rem; }
+    #yapping-box, .loading-subtext { font-size: 0.95rem; }
+    .main-envelope-img { width: 150px; }
+    .pixel-btn { font-size: 9px; padding: 10px 14px; }
+    .parchment-container { padding: 25px 20px; }
+    #text-box { font-size: 1.05rem; min-height: 180px; }
+    .sub-envelopes { gap: 30px; }
+    .envelope-item img { width: 65px; }
+    .popup-letter-text { font-size: 1rem; line-height: 1.4; }
+    .popup-content { padding: 40px 15px 20px 15px; }
+    .pixel-footer { font-size: 8px; bottom: 15px; z-index: 0; }
+}
