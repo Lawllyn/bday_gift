@@ -28,6 +28,14 @@ body {
     background-position: center;
 }
 
+.container {
+  width: 100%;
+  max-width: 420px; /* Batas lebar maksimal di PC/Desktop */
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 16px;
+}
+
 /* Optimasi Animasi GPU */
 .star-falling, 
 .moon-bg, 

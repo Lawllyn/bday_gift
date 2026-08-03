@@ -1,43 +1,36 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import RunawayBtn from './components/RunawayBtn';
-import LoadingArea from './components/LoadingArea';
-import TypeWriter from './components/TypeWriter';
-import PopupModal from './components/PopupModal';
-import MusicPlayer from './components/MusicPlayer';
-import Moon from './components/Moon'; 
-import ShootingStars from './components/ShootingStars'; 
-import GuitarCat from './components/GuitarCat'; 
+import RunawayBtn from './src/components/RunawayBtn';
+import LoadingArea from './src/components/LoadingArea';
+import TypeWriter from './src/components/TypeWriter';
+import PopupModal from './src/components/PopupModal';
+import MusicPlayer from './src/components/MusicPlayer';
+import Moon from './src/components/Moon'; 
+import ShootingStars from './src/components/ShootingStars'; 
+import GuitarCat from './src/components/GuitarCat'; 
 import './style.css'; 
 
 const UCAPAN_TEXT = "Hi, happy birthday!\n\nI hope you have a wonderful day filled with joy and laughter. You deserve all the best on your special day.\n\nMay this year bring you plenty of reasons to smile and endless opportunities to make beautiful memories. Remember to take some time for yourself and enjoy the little things that make life special.";
 
 export default function App() {
-  const [step, setStep] = useState('runaway'); // 'runaway' | 'loading' | 'envelope' | 'main'
-  const [activePopup, setActivePopup] = useState(null); // 'thanks' | 'sorry' | 'kupon' | null
-
-  // State Fitur Tiup Lilin
+  const [step, setStep] = useState('runaway'); 
+  const [activePopup, setActivePopup] = useState(null); 
   const [isBlownOut, setIsBlownOut] = useState(false);
 
-  // 🔒 Ref untuk mengunci plop.mp3 agar HANYA BUNYI 1 KALI Saja
   const hasPlopPlayedRef = useRef(false);
 
-  const munAvatar = document.querySelector('.avatar-mun'); // Sesuaikan selector class/ID-nya
+  useEffect(() => {
+    const munAvatar = document.querySelector('.avatar-mun');
+    if (munAvatar) {
+      const handleTap = (e) => {
+        e.preventDefault();
+        console.log("Avatar mun.png tapped!");
+      };
+      munAvatar.addEventListener('click', handleTap);
+      return () => munAvatar.removeEventListener('click', handleTap);
+    }
+  }, [step]);
 
-if (munAvatar) {
-  // Gunakan event 'click' (sudah mencakup tap di mobile browser modern)
-  munAvatar.addEventListener('click', (e) => {
-    e.preventDefault();
-    
-    // Aksi yang mau dijalankan saat avatar mun.png di-tap:
-    console.log("Avatar mun.png tapped!");
-    
-    // Contoh: trigger fungsi khusus / jalankan animasi
-    // triggerMunAction(); 
-  });
-}
-
-  // Efek Confetti Ultah
   const triggerConfetti = () => {
     confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
     let duration = 4 * 1000;
@@ -50,20 +43,17 @@ if (munAvatar) {
     })();
   };
 
-  // Fungsi untuk memutar plop.mp3 HANYA 1 KALI
   const playPlopSound = () => {
     if (!hasPlopPlayedRef.current) {
-      hasPlopPlayedRef.current = true; // Langsung kunci!
-      const audio = new Audio('/plop.mp3');
+      hasPlopPlayedRef.current = true;
+      const audio = new Audio(`${import.meta.env.BASE_URL}plop.mp3`);
       audio.volume = 0.7;
       audio.play().catch(err => console.log(err));
     }
   };
 
-  // Fungsi Tiup Lilin (Sekaligus Memutar Suara 1x)
   const handleBlowCandle = () => {
     playPlopSound();
-
     if (!isBlownOut) {
       setIsBlownOut(true);
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.5 } });
@@ -72,33 +62,23 @@ if (munAvatar) {
 
   return (
     <React.Fragment>
-    
-      {/* Background Bintang */}
       <div className="stars"></div>
-
-      {/* 🌠 BINTANG JATUH */}
       <ShootingStars />
 
-      {/* 2. PINK MOON (Otomatis menyesuaikan ukuran & posisi via Moon.jsx) */}
-      {(step === 'runaway' || step === 'loading') && (
-        <Moon />
-      )}
+      {(step === 'runaway' || step === 'loading') && <Moon />}
 
-      {/* 1. TOMBOL KABUR */}
       {step === 'runaway' && (
         <RunawayBtn onComplete={() => setStep('loading')} />
       )}
 
-      {/* 2. LOADING SCREEN */}
       {step === 'loading' && (
         <LoadingArea onComplete={() => setStep('envelope')} />
       )}
       
-      {/* 3. HALAMAN AMPLOP UTAMA */}
       {step === 'envelope' && (
         <div id="envelope-page" className="page-section" style={{ display: 'flex' }}>
           <p className="pixel-text color-magenta">Letter For You</p>
-          <img src="/foto/letternobg.png" alt="Letter" className="main-envelope-img" />
+          <img src={`${import.meta.env.BASE_URL}foto/letternobg.png`} alt="Letter" className="main-envelope-img" />
           <div className="btn-group">
             <button className="pixel-btn btn-gray" onClick={() => window.location.reload()}>
               Go Back
@@ -116,15 +96,10 @@ if (munAvatar) {
         </div>
       )}
 
-      {/* 4. HALAMAN UTAMA (KUE & SURAT) */}
       {step === 'main' && (
         <div className="main-content-wrapper" style={{ display: 'grid' }}>
-          
-          {/* SISI KIRI: MUSIC PLAYER & KUE */}
           <div className="left-side-panel">
             <MusicPlayer />
-
-            {/* Kue Ultah Interaktif */}
             <div className="cake-wrapper">
               <p className="pixel-text-sub" style={{ fontSize: '9px', color: '#ff80ab', marginBottom: '30px' }}>
                 {isBlownOut ? '✨ Wish Granted! ✨' : '👇 Click candle to blow!'}
@@ -140,16 +115,10 @@ if (munAvatar) {
             </div>
           </div>
 
-          {/* SISI KANAN: KERTAS SURAT (SUDAH DIBUNGKUS DENGAN WRAPPER TUMPUKAN) */}
           <div className="right-side-panel">
             <div className="paper-stack-wrapper">
-              {/* Kertas Belakang 2 (Mekar Kanan) */}
               <div className="paper-layer paper-back-2"></div>
-
-              {/* Kertas Belakang 1 (Mekar Kiri) */}
               <div className="paper-layer paper-back-1"></div>
-
-              {/* Kertas Utama (Depan) */}
               <div className="parchment-container">
                 <TypeWriter text={UCAPAN_TEXT} />
                 <p className="signature" style={{ color: '#4a3c31', fontWeight: 'bold' }}> ~Lawllyn</p>
@@ -157,27 +126,24 @@ if (munAvatar) {
             </div>
           </div>
 
-          {/* BAGIAN BAWAH: SUB ENVELOPES */}
           <div className="needs-more-section">
             <p className="pixel-text color-magenta" style={{ fontSize: '14px', marginBottom: '20px' }}>
               needs more?
             </p>
             <div className="sub-envelopes">
               <div className="envelope-item" onClick={() => setActivePopup('thanks')}>
-                <img src="/foto/news.png" alt="Thanks Envelope" />
+                <img src={`${import.meta.env.BASE_URL}foto/news.png`} alt="Thanks Envelope" />
                 <span>thanks</span>
               </div>
               <div className="envelope-item" onClick={() => setActivePopup('sorry')}>
-                <img src="/foto/news.png" alt="Sorry Envelope" />
+                <img src={`${import.meta.env.BASE_URL}foto/news.png`} alt="Sorry Envelope" />
                 <span>sorry</span>
               </div>
             </div>
           </div>
-
         </div>
       )}
 
-      {/* POPUP MODALS */}
       {activePopup && (
         <PopupModal 
           type={activePopup} 
@@ -186,12 +152,10 @@ if (munAvatar) {
         />
       )}
 
-      {/* 🐈‍⬛ KUCING IRENG GITARIS */}
       {step !== 'runaway' && (
         <GuitarCat step={step} isFinished={step === 'main'} />
       )}
 
-      {/* FOOTER GARIS */}
       <footer className="pixel-footer">made by Lawllyn</footer>
     </React.Fragment>
   );
