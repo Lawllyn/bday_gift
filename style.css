@@ -37,6 +37,8 @@ body {
     will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
+    cursor: pointer;
+  touch-action: manipulation; /* Optimasi respon tap di mobile */
 }
 
 /* ================= BACKGROUND SIHIR BINTANG PIXEL (FIXED FULLSCREEN) ================= */

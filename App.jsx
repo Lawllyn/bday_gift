@@ -22,6 +22,21 @@ export default function App() {
   // 🔒 Ref untuk mengunci plop.mp3 agar HANYA BUNYI 1 KALI Saja
   const hasPlopPlayedRef = useRef(false);
 
+  const munAvatar = document.querySelector('.avatar-mun'); // Sesuaikan selector class/ID-nya
+
+if (munAvatar) {
+  // Gunakan event 'click' (sudah mencakup tap di mobile browser modern)
+  munAvatar.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    // Aksi yang mau dijalankan saat avatar mun.png di-tap:
+    console.log("Avatar mun.png tapped!");
+    
+    // Contoh: trigger fungsi khusus / jalankan animasi
+    // triggerMunAction(); 
+  });
+}
+
   // Efek Confetti Ultah
   const triggerConfetti = () => {
     confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
